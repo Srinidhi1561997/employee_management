@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import {HashRouter as Router} from 'react-router-dom'
+import { connect } from "react-redux";
+import AppRoutes from './router'
+import {
+  deleteEmployees,
+  createEmployees,
+  getEmployees
+} from "./reducers/actions"
+import AppPropType from './AppPropType'
+import { initialReducerState } from './utils/interface';
 
-function App() {
+const App : React.FC<AppPropType> =(
+  {
+    employees,
+    deleteEmployees,
+    createEmployees,
+    getEmployees}
+)=> {
+
+  useEffect(()=>{
+    getEmployees();
+  },[getEmployees])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          hello
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <AppRoutes/>
+    </Router>
   );
 }
 
-export default App;
+const mapStateToProps = (state: initialReducerState) => {
+  console.log('employees is', state)
+  return {
+    employees: state.employees,
+    isLoading: state.isLoading
+  };
+};
+
+export default connect(mapStateToProps, {
+  deleteEmployees,
+  getEmployees,
+  createEmployees,
+})(App);
