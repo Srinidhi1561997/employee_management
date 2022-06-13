@@ -7,7 +7,8 @@ export type employeeData = {
     gender: string
     last_name: string
     office_location: string
-    emp_actions:number
+    emp_actions: number
+    id: string
 }
 export interface initialReducerState {
     isLoading: boolean
@@ -15,7 +16,8 @@ export interface initialReducerState {
     err:object
     success: number
     isDelete: boolean
-}
+    isEdit: boolean
+    editUser: object}
 
 
 // For Action Creator
@@ -32,6 +34,12 @@ export interface markIncompleteAction {
 export interface deleteEmployeesAction {
     type: "DELETE_EMPLOYEE";
     employee_id: string;
+}
+
+export interface editSpecificEmployeeAction {
+    type: "EDIT_SPECIFIC_EMPLOYEE"
+    employee_id: string;
+    data:employeeData;
 }
 
 export interface createEmployeesAction {
@@ -75,4 +83,5 @@ export const actionIds = {
     DELETE_EMPLOYEE: "DELETE_EMPLOYEE",
     CREATE_EMPLOYEE: "CREATE_EMPLOYEE",
     GET_EMPLOYEES: "GET_EMPLOYEES",
+    EDIT_SPECIFIC_EMPLOYEE: "EDIT_SPECIFIC_EMPLOYEE"
 };

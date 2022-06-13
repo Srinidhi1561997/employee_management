@@ -52,7 +52,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }))
 
-export default function AppHeader() {
+export default function AppHeader(props:any) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -82,7 +82,7 @@ export default function AppHeader() {
                             display: { xs: 'none', sm: 'block' },
                         }}
                     >
-                        Add new employee
+                        {props.headerName}
                     </Typography>
                 </Toolbar>
             </AppBar>

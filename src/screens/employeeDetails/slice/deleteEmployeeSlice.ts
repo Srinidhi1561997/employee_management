@@ -6,7 +6,9 @@ const initialState: initialReducerState = {
     employees: [],
     err:{},
     success: 0,
-    isDelete:false
+    isDelete:false,
+    editUser:{},
+    isEdit: false
 }
 
 const DeleteEmployeeSlice = createSlice({

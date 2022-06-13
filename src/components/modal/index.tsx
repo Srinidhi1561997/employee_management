@@ -41,7 +41,7 @@ export default function AlertDialog(props:any) {
           {"Are you sure, you want to delete?"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="alert-dialog-description" style={{fontWeight:'bold'}}>
                 {props.employee_name}
           </DialogContentText>
         </DialogContent>

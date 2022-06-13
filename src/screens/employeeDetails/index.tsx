@@ -26,11 +26,13 @@ import AlertDialog from "../../components/modal"
 import {
     deleteEmployees,
     createEmployees,
-    getEmployees
+    getEmployees,
+    editSpecificEmployee
   } from "../../reducers/actions"
 import SearchAppBar from '../../components/searchAppBar'
 import { useAppSelector ,useAppDispatch} from '../../hooks'
 import { employeeData } from '../../utils/interface'
+import SnackbarMessage from "../../components/snackbar"
 // import { EmployeeType } from '../../utils/interface'
 // import { deleteEmployee } from '../EmployeeDetails/apiHandle'
 // import { GET_EMPLOYEES } from '../App/reduxTypes'
@@ -47,6 +49,7 @@ type Data = {
     last_name: string
     office_location: string
     emp_actions: number
+    id:string
 }
 
 // function createData(
@@ -186,16 +189,16 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         key={headCell.id}
                         // align={headCell.numeric ? 'right' : 'left'}
                         // padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
+                        sortDirection={orderBy === headCell.id && headCell.id !== 'emp_actions'? order : false}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
+                            direction={orderBy === headCell.id && headCell.id !== 'emp_actions'? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
                             style={{ fontWeight: 'bold' }}
                         >
                             {headCell.label}
-                            {orderBy === headCell.id ? (
+                            { orderBy !== 'emp_actions' && orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                 </Box>
@@ -217,6 +220,7 @@ function Home(): JSX.Element {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
     const employees = useAppSelector((state) => state.employee.employees)
+    const isDelete = useAppSelector((state) => state.deleteEmployee.isDelete)
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('employee_id');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -228,6 +232,7 @@ function Home(): JSX.Element {
     const [toggleLoader, setToggleLoader] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [deleteEmployee, setDeleteEmployee] = React.useState<employeeData>();
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
     console.log('emplo', employees);
     useEffect(()=>{
@@ -239,13 +244,24 @@ function Home(): JSX.Element {
         setSearchResults(employees);
     }, [employees]);
 
+    useEffect(()=>{
+        if(isDelete){
+            setOpenSnackbar(true);
+            dispatch(getEmployees())
+        }
+    },[isDelete]);
+    
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof Data,
     ) => {
         const isAsc = orderBy === property && order === 'asc';
+        if(property !=='emp_actions'){
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
+    } else {
+        // setOrder(null);
+    }
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -322,7 +338,8 @@ function Home(): JSX.Element {
                     gender: "",
                     last_name: "",
                     office_location: "",
-                    emp_actions:1
+                    emp_actions:1,
+                    id:''
                 }]);
             }
         } else {
@@ -357,6 +374,7 @@ function Home(): JSX.Element {
                     >
                         {/* <Typography>Are you sure, you want to delete {deleteEmployee?.first_name}</Typography> */}
                     </AlertDialog>
+                    <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name} deleted successfully`}></SnackbarMessage>
                 <TableContainer style={{ marginTop: "1%" }}>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -413,26 +431,31 @@ function Home(): JSX.Element {
                                             <TableCell align="left">{row.gender}</TableCell>
                                             <TableCell align="left">{row.designation}</TableCell>
                                             <TableCell align="left">{row.office_location}</TableCell>
-                                            {row?.employee_id === '1' ? <TableCell /> :
+                                            
                                                 <TableCell align='right' style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     {/* <Link to="/employee-details"> */}
+                                                    {row?.employee_id === '1' ? <></> :
+                                                
                                                     <IconButton>
                                                     <EditIcon
                                                         // className={classes.editIcon}
                                                         // onClick={() => editFunction(row, index)}
                                                         style={{cursor:'pointer', color:'blue'}}
-                                                        onClick={() => navigate('/update-employee', { state: { employee_id: row?.employee_id } })}
+                                                        onClick={() => [
+                                                            // dispatch(getSpecificEmployee(row?.id)),
+                                                            navigate('/update-employee', { state: { editUser: row } })]}
                                                     />
-                                                    </IconButton>
+                                                    </IconButton>}
                                                     {/* </Link> */}
+                                                    {row?.employee_id === '1' ? <></> :
                                                     <IconButton>
                                                     <DeleteIcon
                                                      style={{cursor:'pointer', color:'red'}}
                                                     // className={classes.deleteIcon}
                                                     onClick={() => deleteFunction(row)}
                                                     />
-                                                    </IconButton>
-                                                </TableCell>}
+                                                    </IconButton>}
+                                                </TableCell>
                                         </TableRow>
                                     );
                                 })}

@@ -5,13 +5,14 @@ import { AxiosResponse } from "axios";
 import {
     createdEmployeesAction,
     deletedEmployeesAction,
-    gotTodos,
+    editSpecificEmployeeAction,
     createEmployeesAction,
     deleteEmployeesAction,
 } from "../utils/interface";
 import { GetEmployeeAction } from "../screens/employeeDetails/slice/getEmployeeSlice";
 import { DeleteEmployeeAction } from "../screens/employeeDetails/slice/deleteEmployeeSlice";
 import { CreateEmployeeAction } from "../screens/createEmployee/slice";
+import { EditSpecificEmployeeAction } from "../screens/updateEmployee/slice";
 import {
     deleteEmployees,
     createEmployees,
@@ -99,4 +100,37 @@ function* getEmployeesWorker() {
     }
 }
 
-export {createEmployeesWorker, getEmployeesWorker, deleteEmployeesWorker}
+function* editSpecificEmployeeWorker({employee_id,data}:editSpecificEmployeeAction) {
+    const editedData = {
+        designation: data.designation,
+        email: data.email,
+        first_name: data.first_name,
+        gender: data.gender,
+        last_name: data.last_name,
+        office_location: data.office_location,
+    }
+    yield put(EditSpecificEmployeeAction.initiate_Edit_Specific_Employees());
+    console.log('edited values are', data)
+    try {
+        const response: AxiosResponse = yield call(employeeApi.put, `/employee_list/${employee_id}`,editedData);
+        if(response?.status===200){
+            yield put(EditSpecificEmployeeAction.edit_Specific_EmployeesSuccess(response.data))
+            yield delay(2000)
+            yield put(EditSpecificEmployeeAction.reset_Edit_Specific_Employee())
+        }
+        // switch (response.status) {
+        //     case 200:
+        //         const data: gotTodos = {
+        //             type: "GOT_EMPLOYEES",
+        //             employees: response.data,
+        //         };
+                console.log('response is edit specific employee', response)
+        //         yield put(data);
+        // }
+    } catch (err) {
+        console.log('error is', err)
+        yield put(EditSpecificEmployeeAction.edit_Specific_EmployeesFailure(err))
+    }
+}
+
+export {createEmployeesWorker, getEmployeesWorker, deleteEmployeesWorker, editSpecificEmployeeWorker}
