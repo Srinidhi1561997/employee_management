@@ -13,6 +13,7 @@ import * as Constants from '../../utils/constants'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { employeeData } from '../../utils/interface';
 import SnackbarMessage from '../../components/snackbar';
+import DelayingAppearance from "../../components/circularProgressBar"
 // import { GET_EMPLOYEES } from '../App/reduxTypes'
 
 const schema = yup
@@ -46,6 +47,7 @@ function UpdateDetails() {
     const location = useLocation()
     const success = useAppSelector((state) => state.createEmployee.success)
     const isEdit = useAppSelector((state) => state.editUserData.isEdit)
+    const isLoading = useAppSelector((state) => state.editUserData.isLoading)
     const [editUserData, setEditUserData] = React.useState<employeeData>()
     const [openSnackbar,setOpenSnackbar] = React.useState(false)
     const history = useNavigate()
@@ -113,6 +115,7 @@ function UpdateDetails() {
         <div>
             <AppHeader headerName="Edit Employee"/>
             <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${editUserData?.first_name} ${editUserData?.last_name} edited successfully`}></SnackbarMessage>
+            <DelayingAppearance loading={isLoading}/>
             <Styles.InputBox>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Styles.OuterDiv>

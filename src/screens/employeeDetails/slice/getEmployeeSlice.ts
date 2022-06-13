@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { initialReducerState } from '../../../utils/interface'
 
 const initialState: initialReducerState = {
-    isLoading: true,
+    isLoading: false,
     employees: [],
     err:{},
     success: 0,

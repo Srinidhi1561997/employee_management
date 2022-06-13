@@ -14,6 +14,7 @@ import { createEmployees } from '../../reducers/actions'
 import * as Constants from '../../utils/constants'
 import SnackbarMessage from '../../components/snackbar';
 import { Style } from '@mui/icons-material';
+import DelayingAppearance from '../../components/circularProgressBar'
 // import { GET_EMPLOYEES } from '../App/reduxTypes'
 
 const schema = yup
@@ -90,6 +91,7 @@ function CreateEmployee() {
         <div>
             <AppHeader headerName="Add new employee"/>
             <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`Employee created successfully`}></SnackbarMessage>
+            <DelayingAppearance loading={isLoading}/>
             <Styles.InputBox>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Styles.OuterDiv>

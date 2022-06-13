@@ -33,9 +33,7 @@ import SearchAppBar from '../../components/searchAppBar'
 import { useAppSelector ,useAppDispatch} from '../../hooks'
 import { employeeData } from '../../utils/interface'
 import SnackbarMessage from "../../components/snackbar"
-// import { EmployeeType } from '../../utils/interface'
-// import { deleteEmployee } from '../EmployeeDetails/apiHandle'
-// import { GET_EMPLOYEES } from '../App/reduxTypes'
+import DelayingAppearance from "../../components/circularProgressBar"
 
 
 
@@ -220,6 +218,7 @@ function Home(): JSX.Element {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
     const employees = useAppSelector((state) => state.employee.employees)
+    const isLoading = useAppSelector((state) => state.employee.isLoading)
     const isDelete = useAppSelector((state) => state.deleteEmployee.isDelete)
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('employee_id');
@@ -374,6 +373,7 @@ function Home(): JSX.Element {
                     >
                         {/* <Typography>Are you sure, you want to delete {deleteEmployee?.first_name}</Typography> */}
                     </AlertDialog>
+                    <DelayingAppearance loading={isLoading}/>
                     <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name} deleted successfully`}></SnackbarMessage>
                 <TableContainer style={{ marginTop: "1%" }}>
                     <Table
