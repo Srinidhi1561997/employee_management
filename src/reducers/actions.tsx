@@ -5,7 +5,6 @@ import {
     editSpecificEmployeesActionCreator
 } from "./actionCreatorTypes";
 
-
 export const deleteEmployees: deleteEmployeesActionCreator = (employee_id) => {
     return {
         type: "DELETE_EMPLOYEE",

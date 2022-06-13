@@ -1,21 +1,16 @@
 import React, { useEffect } from 'react'
-import { takeEvery, put, call, StrictEffect } from "redux-saga/effects";
-// import { useLocation } from 'react-router-dom'
 import { useForm, SubmitHandler, useFormState } from 'react-hook-form'
 import { useNavigate  } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { MenuItem, Select } from '@mui/material'
-import { CreateEmployeeAction } from './slice'
 import AppHeader from '../../components/appBar'
 import Styles from './styles'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { createEmployees } from '../../reducers/actions'
 import * as Constants from '../../utils/constants'
 import SnackbarMessage from '../../components/snackbar';
-import { Style } from '@mui/icons-material';
 import DelayingAppearance from '../../components/circularProgressBar'
-// import { GET_EMPLOYEES } from '../App/reduxTypes'
 
 const schema = yup
     .object({
@@ -25,7 +20,6 @@ const schema = yup
         email: yup.string().required("email is required").min(10,"email must be atleast 10 characters").max(60, "email should not exceed more than 60 characters").matches(/^([a-zA-Z0-9]+)([\{1}])?[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "invalid email format"),
         gender: yup.string().required(),
         office_location: yup.string().required("office location is required").min(5,"office location must be atleast 5 characters").max(200,"office address should not exceed more than 200 characters").matches(/^[A-Za-z0-9 !@#$%^&*,.)(/]+$/i,"invalid address"),
-        // salary: yup.number().required(),
         employee_id: yup.string().required(),
         emp_actions: yup.number()
     })
@@ -45,9 +39,7 @@ interface IFormInput {
 
 function CreateEmployee() {
     const dispatch = useAppDispatch()
-    const success = useAppSelector((state) => state.createEmployee.success)
     const isLoading = useAppSelector((state) => state.createEmployee.isLoading)
-    const [buttonColor, setButtonColor] = React.useState("#808080")
     const history = useNavigate ()
     const {
         register,
@@ -59,15 +51,7 @@ function CreateEmployee() {
     const [openSnackbar, setOpenSnackbar] = React.useState(false)
 
     const onSubmit: SubmitHandler<IFormInput> = (data) => {
-      dispatch(createEmployees(data));
-        // dispatch({type:"CREATE_EMPLOYEE", data});
-        // if(success?.status === 201)
-        // res.then((response) => {
-        //     console.log('success', response)
-        //     dispatch({ type: GET_EMPLOYEES })
-        // }).catch((err) => {
-        //     console.log('error is', err)
-        // })    
+      dispatch(createEmployees(data));   
     }
    
     useEffect(()=>{
@@ -82,11 +66,9 @@ function CreateEmployee() {
 
     const resetFields=()=>{
         reset();
+        console.log('reset is')
     }
-    // const minSalary = 500000
-    // const maxSalary = 2000000
-    // const randSalary = Math.floor(Math.random() * minSalary) + maxSalary
-    console.log('hello', errors,watch(), isDirty,isValid)
+
     return (
         <div>
             <AppHeader headerName="Add new employee"/>
@@ -155,13 +137,9 @@ function CreateEmployee() {
                                     transition: 'all 0.3s ease',
                                     width: '100%',
                                 }}
-                                // labelId="demo-simple-select-autowidth-label"
-                                // id="demo-simple-select"
-                                // label="Gender"
                                 defaultValue="male"
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...register('gender')}
-                                // {...register('male')}
                             >
                                 <MenuItem value="male">male</MenuItem>
                                 <MenuItem value="female">female</MenuItem>
@@ -213,10 +191,8 @@ function CreateEmployee() {
                             <Styles.InputTitle>Employee Id</Styles.InputTitle>
                             <Styles.ErrorDiv>
                             <Styles.Input
-                                // eslint-disable-next-line react/jsx-props-no-spreading
                                 value={Constants.randomNumber}
                                 readOnly
-                                // name="employee_id"
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...register('employee_id', {
                                     // value: Constants.randomNumber,

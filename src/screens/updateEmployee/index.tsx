@@ -109,8 +109,7 @@ function UpdateDetails() {
     const resetFields=()=>{
         reset();
     }
-    // handleSubmit(onSubmit)
-    console.log('helloqwertyu', errors,isValidating ,isDirty, isValid)
+    
     return (
         <div>
             <AppHeader headerName="Edit Employee"/>
@@ -181,12 +180,7 @@ function UpdateDetails() {
                         </Styles.InnerDiv>
                         <Styles.InnerDiv>
                             <Styles.InputTitle>Gender<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
-                            {/* <Styles.Input
-                                type="string"
-                                // eslint-disable-next-line react/jsx-props-no-spreading
-                                {...register('gender')}
-                                placeholder="gender"
-                            />{' '} */}
+                           
                             <Styles.ErrorDiv>
                             <Select
                                 style={{
@@ -200,13 +194,9 @@ function UpdateDetails() {
                                     transition: 'all 0.3s ease',
                                     width: '100%',
                                 }}
-                                // labelId="demo-simple-select-autowidth-label"
-                                // id="demo-simple-select"
-                                // label="Gender"
                                 defaultValue={params?.editUser?.gender.toLowerCase()}
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...register('gender')}
-                                // {...register('male')}
                             >
                                <MenuItem value="male">male</MenuItem>
                                 <MenuItem value="female">female</MenuItem>
@@ -272,7 +262,6 @@ function UpdateDetails() {
                                 value={params?.editUser?.employee_id}
                                 disabled
                                 readOnly
-                                // name="employee_id"
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...register('employee_id', {
                                     // value: editUserData?.employee_id,

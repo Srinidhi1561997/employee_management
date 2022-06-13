@@ -1,23 +1,14 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {
-    deleteEmployees,
-    createEmployees,
-    getEmployees
-  } from "../../reducers/actions"
-import { useAppSelector ,useAppDispatch} from '../../hooks'
+import { deleteEmployees } from "../../reducers/actions"
+import { useAppDispatch } from '../../hooks'
 
 export default function AlertDialog(props:any) {
-  const [open, setOpen] = React.useState(false);
-  const dispatch =useAppDispatch()
-  const handleClickOpen = () => {
-    props.setOpenModal(true);
-  };
+  const dispatch = useAppDispatch()
 
   const handleClose = () => {
     props.setOpenModal(false);
@@ -27,7 +18,7 @@ export default function AlertDialog(props:any) {
     dispatch(deleteEmployees(props.employee_data.id));
     props.setOpenModal(false);
   }
-  console.log("priops values are", props)
+
   return (
     <div>
       <Dialog

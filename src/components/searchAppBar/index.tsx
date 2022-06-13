@@ -31,7 +31,6 @@ const Search = styled('div')(({ theme }) => ({
 }))
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-    // backgroundColor: 'orange',
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -39,20 +38,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-}))
-
-const ClearIconWrapper = styled('div')(({ theme }) => ({
-    // backgroundColor: 'pink',
-    paddingRight: 10,
-    height: '100%',
-    width: '150%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    pointer: 'cursor',
-    // backgroundColor: 'pink',
 }))
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({

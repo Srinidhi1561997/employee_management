@@ -21,7 +21,6 @@ const CreateEmployeeSlice = createSlice({
         create_EmployeesSuccess: (state, action) => {
             state.isLoading = true
             state.success = action.payload
-            // state.employees = action.payload
         },
         create_EmployeesFailure: (state, action) => {
             state.isLoading = false

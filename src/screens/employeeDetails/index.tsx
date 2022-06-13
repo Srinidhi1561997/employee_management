@@ -1,6 +1,5 @@
  
 import React, { useEffect } from 'react'
-import { alpha } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -10,25 +9,14 @@ import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Switch from '@mui/material/Switch'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { visuallyHidden } from '@mui/utils'
 import AlertDialog from "../../components/modal"
-import {
-    deleteEmployees,
-    createEmployees,
-    getEmployees,
-    editSpecificEmployee
-  } from "../../reducers/actions"
+import {getEmployees} from "../../reducers/actions"
 import SearchAppBar from '../../components/searchAppBar'
 import { useAppSelector ,useAppDispatch} from '../../hooks'
 import { employeeData } from '../../utils/interface'
@@ -50,28 +38,6 @@ type Data = {
     id:string
 }
 
-// function createData(
-//     designation: string,
-//     email: string,
-//     employee_id: number,
-//     first_name: string,
-//     gender: string,
-//     last_name: string,
-//     office_location: string,
-//     salary: number
-// ): Data {
-//     return {
-//         designation,
-//         email,
-//         employee_id,
-//         // employee_status,
-//         first_name,
-//         gender,
-//         last_name,
-//         office_location,
-//         salary,
-//     }
-// }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -171,22 +137,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                {/* <TableCell padding="checkbox">
-                <Checkbox
-                    color="primary"
-                    indeterminate={numSelected > 0 && numSelected < rowCount}
-                    checked={rowCount > 0 && numSelected === rowCount}
-                    onChange={onSelectAllClick}
-                    inputProps={{
-                        'aria-label': 'select all desserts',
-                    }}
-                />
-            </TableCell> */}
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        // align={headCell.numeric ? 'right' : 'left'}
-                        // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id && headCell.id !== 'emp_actions'? order : false}
                     >
                         <TableSortLabel
@@ -207,10 +160,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableRow>
         </TableHead>
     );
-}
-
-interface EnhancedTableToolbarProps {
-    numSelected: number;
 }
 
 
@@ -334,7 +283,7 @@ function Home(): JSX.Element {
                     email: "",
                     employee_id: '1',
                     first_name: "",
-                    gender: "",
+                    gender: "No results found",
                     last_name: "",
                     office_location: "",
                     emp_actions:1,
@@ -347,20 +296,10 @@ function Home(): JSX.Element {
     }
 
     const deleteFunction=(rowValue:employeeData)=>{
-        // dispatch(deleteEmployees(rowValue.id));
-        //     console.log('row value is', rowValue.id)
         setDeleteEmployee(rowValue);
         setOpenModal(true);
-            // const result = deleteEmployee(rowValue.employee_id)
-            // result.then((res)=>{
-            //     console.log('response', res)
-            //     dispatch({ type: GET_EMPLOYEES })
-            // }).catch((error)=>{
-            //     console.log('error',error)
-            // })
     }
 
-    console.log('searchResults are', searchResults)
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -371,7 +310,6 @@ function Home(): JSX.Element {
                     employee_name={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name}`}
                     employee_data={deleteEmployee}
                     >
-                        {/* <Typography>Are you sure, you want to delete {deleteEmployee?.first_name}</Typography> */}
                     </AlertDialog>
                     <DelayingAppearance loading={isLoading}/>
                     <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name} deleted successfully`}></SnackbarMessage>
@@ -395,34 +333,20 @@ function Home(): JSX.Element {
                             {stableSort(searchResults, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    // const isItemSelected = isSelected(row.employee_id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
                                             onClick={(event) => handleClick(event, row.first_name)}
-                                            // role="checkbox"
-                                            // aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row?.employee_id}
-                                        // selected={isItemSelected}
                                         >
-                                            {/* <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId,
-                                                    }}
-                                                />
-                                            </TableCell> */}
                                             <TableCell align="left">{row?.employee_id === '1' ? '' : row?.employee_id}</TableCell>
                                             <TableCell
                                                 component="th"
                                                 id={labelId}
                                                 scope="row"
-                                            // padding="none"
                                             >
                                                 {row.first_name}
                                             </TableCell>
@@ -433,25 +357,19 @@ function Home(): JSX.Element {
                                             <TableCell align="left">{row.office_location}</TableCell>
                                             
                                                 <TableCell align='right' style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    {/* <Link to="/employee-details"> */}
                                                     {row?.employee_id === '1' ? <></> :
                                                 
                                                     <IconButton>
                                                     <EditIcon
-                                                        // className={classes.editIcon}
-                                                        // onClick={() => editFunction(row, index)}
                                                         style={{cursor:'pointer', color:'blue'}}
                                                         onClick={() => [
-                                                            // dispatch(getSpecificEmployee(row?.id)),
                                                             navigate('/update-employee', { state: { editUser: row } })]}
                                                     />
                                                     </IconButton>}
-                                                    {/* </Link> */}
                                                     {row?.employee_id === '1' ? <></> :
                                                     <IconButton>
                                                     <DeleteIcon
                                                      style={{cursor:'pointer', color:'red'}}
-                                                    // className={classes.deleteIcon}
                                                     onClick={() => deleteFunction(row)}
                                                     />
                                                     </IconButton>}
