@@ -11,18 +11,8 @@ import {
 import AppPropType from './AppPropType'
 import { initialReducerState } from './utils/interface';
 
-const App : React.FC<AppPropType> =(
-  {
-    employees,
-    deleteEmployees,
-    createEmployees,
-    getEmployees}
-)=> {
+const App  =()=> {
 
-  useEffect(()=>{
-    getEmployees();
-  },[getEmployees])
-  
   return (
     <Router>
       <AppRoutes/>
@@ -30,16 +20,11 @@ const App : React.FC<AppPropType> =(
   );
 }
 
-const mapStateToProps = (state: initialReducerState) => {
-  console.log('employees is', state)
-  return {
-    employees: state.employees,
-    isLoading: state.isLoading
-  };
-};
+// const mapStateToProps = (state: initialReducerState) => {
+//   return {
+//     employees: state.employees,
+//     isLoading: state.isLoading
+//   };
+// };
 
-export default connect(mapStateToProps, {
-  deleteEmployees,
-  getEmployees,
-  createEmployees,
-})(App);
+export default App;

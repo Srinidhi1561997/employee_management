@@ -66,7 +66,6 @@ function CreateEmployee() {
 
     const resetFields=()=>{
         reset();
-        console.log('reset is')
     }
 
     return (
@@ -137,7 +136,7 @@ function CreateEmployee() {
                                     transition: 'all 0.3s ease',
                                     width: '100%',
                                 }}
-                                defaultValue="male"
+                                defaultValue=""
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...register('gender')}
                             >
@@ -207,7 +206,10 @@ function CreateEmployee() {
                     </Styles.OuterDiv>
                     <Styles.OuterDiv>
                     <Styles.InnerDiv>
-                        <Styles.Input type="submit" style={{backgroundColor:isDirty &&isValid? '#1976d2':"#808080", color:'#FFF'}}/>
+                        <Styles.Input type="submit" style={{
+                            backgroundColor: '#1976d2',
+                            // isDirty &&isValid? '#1976d2':"#808080", 
+                            color:'#FFF'}}/>
                     </Styles.InnerDiv>
                     <Styles.InnerDiv>
                         <Styles.Button type="reset" onClick={resetFields}>Reset</Styles.Button>

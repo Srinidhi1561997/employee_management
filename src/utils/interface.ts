@@ -41,9 +41,15 @@ export interface getEmployees {
     type: "GET_EMPLOYEES";
 }
 
+export interface searchEmployeesAction {
+    type: "SEARCH_EMPLOYEES";
+    searchKey: string
+}
+
 export const actionIds = {
     DELETE_EMPLOYEE: "DELETE_EMPLOYEE",
     CREATE_EMPLOYEE: "CREATE_EMPLOYEE",
     GET_EMPLOYEES: "GET_EMPLOYEES",
-    EDIT_SPECIFIC_EMPLOYEE: "EDIT_SPECIFIC_EMPLOYEE"
+    EDIT_SPECIFIC_EMPLOYEE: "EDIT_SPECIFIC_EMPLOYEE",
+    SEARCH_EMPLOYEES : "SEARCH_EMPLOYEES"
 };

@@ -11,6 +11,9 @@ import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Clear'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import { Link } from 'react-router-dom'
+import { useAppSelector ,useAppDispatch} from '../../hooks'
+import { useDispatch } from 'react-redux'
+import {searchEmployees} from "../../reducers/actions"
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -61,16 +64,27 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar(props: any) {
     const [searchTerm, setSearchTerm] = React.useState('')
+    const dispatch= useDispatch()
+    const isDelete = useAppSelector((state) => state.deleteEmployee.isDelete)
     const { searchKeyTerm } = props
     const searchHandler = (value: any) => {
         setSearchTerm(value.trim())
         searchKeyTerm(value.trim())
+        dispatch(searchEmployees(value.trim()));
     }
 
+    React.useEffect(()=>{
+        if(isDelete){
+            setSearchTerm('')
+            searchKeyTerm('')
+            dispatch(searchEmployees(''));
+        }
+    },[isDelete]);
+
     const clearSearch = () => {
-        console.log('clear the search field')
         setSearchTerm('')
         searchKeyTerm('')
+        dispatch(searchEmployees(''));
     }
 
     return (
@@ -122,7 +136,7 @@ export default function SearchAppBar(props: any) {
                             <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
-                            placeholder="Search by first name…"
+                            placeholder="Search by..."
                             inputProps={{ 'aria-label': 'search' }}
                             value={searchTerm}
                         />

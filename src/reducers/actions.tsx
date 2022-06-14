@@ -2,7 +2,8 @@ import {
     deleteEmployeesActionCreator,
     createEmployeesActionCreator,
     getEmployeesActionCreator,
-    editSpecificEmployeesActionCreator
+    editSpecificEmployeesActionCreator,
+    searchEmployessActionCreator
 } from "./actionCreatorTypes";
 
 export const deleteEmployees: deleteEmployeesActionCreator = (employee_id) => {
@@ -20,17 +21,22 @@ export const createEmployees: createEmployeesActionCreator = (data) => {
 };
 
 export const getEmployees: getEmployeesActionCreator = () => {
-    console.log('getEmployess called')
     return {
         type: "GET_EMPLOYEES",
     };
 };
 
 export const editSpecificEmployee: editSpecificEmployeesActionCreator = (employee_id , data) => {
-    // console.log('getEmployess called')
     return {
         type: "EDIT_SPECIFIC_EMPLOYEE",
         employee_id,
         data
     };
 };
+
+export const searchEmployees: searchEmployessActionCreator = (searchKey)=>{
+    return {
+        type: "SEARCH_EMPLOYEES",
+        searchKey
+    }
+}

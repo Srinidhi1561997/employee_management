@@ -13,10 +13,10 @@ import Paper from '@mui/material/Paper'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate ,useLocation} from 'react-router-dom'
 import { visuallyHidden } from '@mui/utils'
 import AlertDialog from "../../components/modal"
-import {getEmployees} from "../../reducers/actions"
+import {getEmployees,searchEmployees} from "../../reducers/actions"
 import SearchAppBar from '../../components/searchAppBar'
 import { useAppSelector ,useAppDispatch} from '../../hooks'
 import { employeeData } from '../../utils/interface'
@@ -166,7 +166,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 function Home(): JSX.Element {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
+    const location = useLocation()
     const employees = useAppSelector((state) => state.employee.employees)
+    const filterEmployees:employeeData[] = useAppSelector((state) => state.searchEmployee.employees)
     const isLoading = useAppSelector((state) => state.employee.isLoading)
     const isDelete = useAppSelector((state) => state.deleteEmployee.isDelete)
     const [order, setOrder] = React.useState<Order>('asc');
@@ -181,8 +183,8 @@ function Home(): JSX.Element {
     const [openModal, setOpenModal] = React.useState(false);
     const [deleteEmployee, setDeleteEmployee] = React.useState<employeeData>();
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const pageNumber:any = location.state as {pageNumber:Number}
 
-    console.log('emplo', employees);
     useEffect(()=>{
         dispatch(getEmployees())
     },[getEmployees])
@@ -199,6 +201,12 @@ function Home(): JSX.Element {
         }
     },[isDelete]);
     
+    // useEffect(()=>{
+    //     if(pageNumber?.pageNumber){
+    //         setPage(pageNumber);
+    //     }
+    // },[pageNumber]);
+
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof Data,
@@ -262,6 +270,9 @@ function Home(): JSX.Element {
 
     const searchHandler = (term: string) => {
         setPage(0);
+    //     if(term.length>=1){
+    //     dispatch(searchEmployees(term));
+    // }
         setSearchTerm(term);
         if (searchResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).length < 1) {
             setToggleLoader(true);
@@ -271,12 +282,12 @@ function Home(): JSX.Element {
             setToggleLoader(true);
         }
         if (term.length >= 1) {
-            const results = employees.filter((user:Data) => {
-                return user.first_name.toLowerCase().startsWith(term.toLowerCase());
-                // Use the toLowerCase() method to make it case-insensitive
-            });
-            if (results.length > 0) {
-                setSearchResults(results);
+            // const results = employees.filter((user:Data) => {
+            //     return user.first_name.toLowerCase().startsWith(term.toLowerCase());
+            //     // Use the toLowerCase() method to make it case-insensitive
+            // });
+            if (filterEmployees.length > 0) {
+                setSearchResults(filterEmployees);
             } else {
                 setSearchResults([{
                     designation: "",
@@ -300,6 +311,7 @@ function Home(): JSX.Element {
         setOpenModal(true);
     }
 
+    console.log('page number is',location,pageNumber)
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -356,14 +368,14 @@ function Home(): JSX.Element {
                                             <TableCell align="left">{row.designation}</TableCell>
                                             <TableCell align="left">{row.office_location}</TableCell>
                                             
-                                                <TableCell align='right' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <TableCell align='left' style={{ justifyContent: 'space-between' }}>
                                                     {row?.employee_id === '1' ? <></> :
                                                 
                                                     <IconButton>
                                                     <EditIcon
                                                         style={{cursor:'pointer', color:'blue'}}
                                                         onClick={() => [
-                                                            navigate('/update-employee', { state: { editUser: row } })]}
+                                                            navigate('/update-employee', { state: { editUser: row, pageNumber: page} })]}
                                                     />
                                                     </IconButton>}
                                                     {row?.employee_id === '1' ? <></> :

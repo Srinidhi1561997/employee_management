@@ -3,7 +3,8 @@ import {
     createEmployeesAction,
     getEmployees,
     employeeData,
-    editSpecificEmployeeAction
+    editSpecificEmployeeAction,
+    searchEmployeesAction
 } from "../utils/interface";
 
 
@@ -15,3 +16,5 @@ export type createEmployeesActionCreator = (data: employeeData) => createEmploye
 export type getEmployeesActionCreator = () => getEmployees;
 
 export type editSpecificEmployeesActionCreator = (id: string, data:employeeData) => editSpecificEmployeeAction;
+
+export type searchEmployessActionCreator = (searchKey: string) => searchEmployeesAction;

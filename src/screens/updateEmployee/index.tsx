@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { takeEvery, put, call, StrictEffect } from "redux-saga/effects";
 // import { useLocation } from 'react-router-dom'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm, SubmitHandler, Controller} from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { MenuItem, Select } from '@mui/material'
@@ -56,9 +56,14 @@ function UpdateDetails() {
         handleSubmit,
         watch,
         reset,
+        control,
         formState: { errors, isDirty, isValid ,isValidating},
-    } = useForm<IFormInput>({ resolver: yupResolver(schema) })
+    } = useForm<IFormInput>({ resolver: yupResolver(schema),
+            defaultValues:{
+                gender:""
+            } })
     const params:any = location.state as { editUser: employeeData }
+    const pageNumber:any = location.state as {pageNumber:Number}
 
     const onSubmit: SubmitHandler<IFormInput> = (data) => {
         if( data.designation === ""){
@@ -85,14 +90,10 @@ function UpdateDetails() {
         if( data.email === ""){
             data.email = params.editUser.email;
         };
-        console.log('onSubmit handler', data)
         dispatch(editSpecificEmployee(params.editUser?.id,data)); 
     }
    
     useEffect(()=>{
-        console.log('print the edituser', params.editUser)
-        watch()
-
         setEditUserData(params.editUser)
     },[])
 
@@ -101,7 +102,7 @@ function UpdateDetails() {
             setOpenSnackbar(true)
             setTimeout(()=>{
                 reset();
-                history('/')
+                history('/',{state:{pageNumber:pageNumber.pageNumber}})
             },1000)
         }
     },[isEdit])
@@ -112,7 +113,7 @@ function UpdateDetails() {
     
     return (
         <div>
-            <AppHeader headerName="Edit Employee"/>
+            <AppHeader headerName="Edit employee"/>
             <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${editUserData?.first_name} ${editUserData?.last_name} edited successfully`}></SnackbarMessage>
             <DelayingAppearance loading={isLoading}/>
             <Styles.InputBox>
@@ -124,11 +125,7 @@ function UpdateDetails() {
                             <Styles.Input
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 defaultValue={params?.editUser?.first_name}
-                                {...register('first_name', {
-                                    maxLength: 20,
-                                    pattern: /^[A-Za-z_ ]+$/i,
-                                    minLength:3
-                                })}
+                                {...register('first_name')}
                                 placeholder="first name"
                             />
                             <Styles.ErrorSpan>
@@ -143,11 +140,7 @@ function UpdateDetails() {
                             <Styles.Input
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 defaultValue={params?.editUser?.last_name}
-                                {...register('last_name', {
-                                    maxLength:20,
-                                    minLength:3,
-                                    pattern: /^[A-Za-z_ ]+$/i,
-                                })}
+                                {...register('last_name')}
                                 placeholder="last name"
                             />
                             <Styles.ErrorSpan>
@@ -165,11 +158,7 @@ function UpdateDetails() {
                                 type="string"
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 defaultValue={params?.editUser?.email}
-                                {...register('email',{
-                                    pattern: /^([a-zA-Z0-9]+)([\{1}])?[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                                    minLength:10,
-                                    maxLength:60
-                                })}
+                                {...register('email')}
                                 placeholder="email"
                             />
                             <Styles.ErrorSpan>
@@ -217,11 +206,7 @@ function UpdateDetails() {
                                 type="string"
                                 defaultValue={params?.editUser?.designation}
                                 // eslint-disable-next-line react/jsx-props-no-spreading
-                                {...register('designation',{
-                                    pattern: /^[A-Za-z0-9_ ]+$/i,
-                                    minLength: 5,
-                                    maxLength: 50
-                                })}
+                                {...register('designation')}
                                 placeholder="designation"
                             />
                             <Styles.ErrorSpan>
@@ -239,11 +224,7 @@ function UpdateDetails() {
                                 type="string"
                                 defaultValue={params?.editUser?.office_location}
                                 // eslint-disable-next-line react/jsx-props-no-spreading
-                                {...register('office_location', {
-                                    pattern: /^[A-Za-z0-9 !@#$%^&*,.)(/]+$/i,
-                                    minLength: 5,
-                                    maxLength: 200
-                                })}
+                                {...register('office_location')}
                                 placeholder="office location"
                             />
                             <Styles.ErrorSpan>
