@@ -51,6 +51,7 @@ function UpdateDetails() {
     const [editUserData, setEditUserData] = React.useState<employeeData>()
     const [openSnackbar,setOpenSnackbar] = React.useState(false)
     const history = useNavigate()
+    const params:any = location.state as { editUser: employeeData }
     const {
         register,
         handleSubmit,
@@ -60,9 +61,9 @@ function UpdateDetails() {
         formState: { errors, isDirty, isValid ,isValidating},
     } = useForm<IFormInput>({ resolver: yupResolver(schema),
             defaultValues:{
-                gender:""
+                gender: params?.editUser?.gender.toLowerCase()
             } })
-    const params:any = location.state as { editUser: employeeData }
+    
     const pageNumber:any = location.state as {pageNumber:Number}
 
     const onSubmit: SubmitHandler<IFormInput> = (data) => {
@@ -171,6 +172,10 @@ function UpdateDetails() {
                             <Styles.InputTitle>Gender<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
                            
                             <Styles.ErrorDiv>
+                                <Controller
+                                name="gender"
+                                control={control}
+                                render={({ field: { ref, ...field } }) => (
                             <Select
                                 style={{
                                     height: '45px',
@@ -185,7 +190,9 @@ function UpdateDetails() {
                                 }}
                                 defaultValue={params?.editUser?.gender.toLowerCase()}
                                 // eslint-disable-next-line react/jsx-props-no-spreading
-                                {...register('gender')}
+                                // {...register('gender')}
+                                {...field}
+                                inputRef={ref}
                             >
                                <MenuItem value="male">male</MenuItem>
                                 <MenuItem value="female">female</MenuItem>
@@ -193,7 +200,10 @@ function UpdateDetails() {
                                 <MenuItem value="bigender">bigender</MenuItem>
                                 <MenuItem value="genderqueer">genderqueer</MenuItem>
                                 <MenuItem value="others">others</MenuItem>
-                            </Select>{""}
+                            </Select>
+                                )}
+                            />
+                            {""}
                             </Styles.ErrorDiv>
                         </Styles.InnerDiv>
                     </Styles.OuterDiv>

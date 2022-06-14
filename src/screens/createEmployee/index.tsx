@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useForm, SubmitHandler, useFormState } from 'react-hook-form'
+import { useForm, SubmitHandler, useFormState, Controller } from 'react-hook-form'
 import { useNavigate  } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -46,8 +46,12 @@ function CreateEmployee() {
         handleSubmit,
         watch,
         reset,
+        control,
         formState: { errors,isDirty,isValid },
-    } = useForm<IFormInput>({ resolver: yupResolver(schema) })
+    } = useForm<IFormInput>({ resolver: yupResolver(schema),
+    defaultValues:{
+        gender:""
+    } })
     const [openSnackbar, setOpenSnackbar] = React.useState(false)
 
     const onSubmit: SubmitHandler<IFormInput> = (data) => {
@@ -124,6 +128,10 @@ function CreateEmployee() {
                         <Styles.InnerDiv>
                             <Styles.InputTitle>Gender<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
                             <Styles.ErrorDiv>
+                            <Controller
+                                name="gender"
+                                control={control}
+                                render={({ field: { ref, ...field } }) => (
                             <Select
                                 style={{
                                     height: '45px',
@@ -138,7 +146,9 @@ function CreateEmployee() {
                                 }}
                                 defaultValue=""
                                 // eslint-disable-next-line react/jsx-props-no-spreading
-                                {...register('gender')}
+                                // {...register('gender')}
+                                {...field}
+                                inputRef={ref}
                             >
                                 <MenuItem value="male">male</MenuItem>
                                 <MenuItem value="female">female</MenuItem>
@@ -146,7 +156,10 @@ function CreateEmployee() {
                                 <MenuItem value="bigender">bigender</MenuItem>
                                 <MenuItem value="genderqueer">genderqueer</MenuItem>
                                 <MenuItem value="others">others</MenuItem>
-                            </Select>{""}
+                            </Select>
+                                )}
+                                />
+                            {""}
                             </Styles.ErrorDiv>
                         </Styles.InnerDiv>
                     </Styles.OuterDiv>
