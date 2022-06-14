@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import { useAppSelector ,useAppDispatch} from '../../hooks'
 import { useDispatch } from 'react-redux'
 import {searchEmployees} from "../../reducers/actions"
+import useDebounce from "../dbounce";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -65,27 +66,33 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function SearchAppBar(props: any) {
     const [searchTerm, setSearchTerm] = React.useState('')
     const dispatch= useDispatch()
+
+    const deBouncedText = useDebounce(searchTerm, 600);
     const isDelete = useAppSelector((state) => state.deleteEmployee.isDelete)
     const { searchKeyTerm } = props
     const searchHandler = (value: any) => {
         setSearchTerm(value.trim())
         searchKeyTerm(value.trim())
-        dispatch(searchEmployees(value.trim()));
     }
 
     React.useEffect(()=>{
         if(isDelete){
             setSearchTerm('')
             searchKeyTerm('')
-            dispatch(searchEmployees(''));
         }
     },[isDelete]);
 
     const clearSearch = () => {
         setSearchTerm('')
         searchKeyTerm('')
-        dispatch(searchEmployees(''));
     }
+
+    React.useEffect(()=>{
+        console.log('search term', deBouncedText)
+
+        dispatch(searchEmployees(deBouncedText));
+    },[deBouncedText]);
+
 
     return (
         <Box sx={{ flexGrow: 1 }}>

@@ -6,28 +6,6 @@ import { Provider } from 'react-redux';
 import store from './store'
 import axios from 'axios';
 
-// For GET requests
-axios.interceptors.request.use(
-   (req) => {
-      // Add configurations here
-      return req;
-   },
-   (err) => {
-      return Promise.reject(err);
-   })
-   axios.interceptors.response.use(
-    (res) => {
-       // Add configurations here
-       if (res.status === 201) {
-          console.log('Posted Successfully');
-       }
-       return res;
-    },
-    (err) => {
-       return Promise.reject(err);
-    }
- );
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

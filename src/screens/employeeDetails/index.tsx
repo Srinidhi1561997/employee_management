@@ -1,5 +1,5 @@
  
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -306,17 +306,21 @@ function Home(): JSX.Element {
         }
     }
 
+    useEffect(()=>{
+        setSearchResults(filterEmployees)
+    },[filterEmployees]);
+
     const deleteFunction=(rowValue:employeeData)=>{
         setDeleteEmployee(rowValue);
         setOpenModal(true);
     }
 
-    console.log('page number is',location,pageNumber)
+    console.log('page number is',filterEmployees)
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <SearchAppBar
-                    searchKeyTerm={searchHandler} />
+                    searchKeyTerm={searchHandler}  setSearchResults={setSearchResults}/>
                     <AlertDialog openPopUp={openModal} 
                     setOpenModal={setOpenModal}
                     employee_name={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name}`}

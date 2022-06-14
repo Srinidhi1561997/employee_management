@@ -18,7 +18,7 @@ import DelayingAppearance from "../../components/circularProgressBar"
 
 const schema = yup
     .object({
-        first_name: yup.string().required("frst name is required").min(3,"first name must be atleast 3 characters").max(20," first name should not exceed more than 20 characters").matches(/^[A-Za-z_ ]+$/i,"first name should contain only character"),
+        first_name: yup.string().required("first name is required").min(3,"first name must be atleast 3 characters").max(20," first name should not exceed more than 20 characters").matches(/^[A-Za-z_ ]+$/i,"first name should contain only character"),
         last_name: yup.string().required("last name is required").min(3, "last name must be atleast 3 characters").max(20, "last name should not exceed more than 20 characters").matches(/^[A-Za-z_ ]+$/i, "last name should contain only character"),
         designation: yup.string().required("designation is required").min(5,"designation must be atleast 5 characters").max(50,"designation should not exceed more than 50 characters").matches(/^[A-Za-z0-9_ ]+$/i, "splecial characters are not allowed"),
         email: yup.string().required("email is required").min(10,"email must be atleast 10 characters").max(60, "email should not exceed more than 60 characters").matches(/^([a-zA-Z0-9]+)([\{1}])?[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "invalid email format"),
@@ -117,44 +117,44 @@ function UpdateDetails() {
             <AppHeader headerName="Edit employee"/>
             <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${editUserData?.first_name} ${editUserData?.last_name} edited successfully`}></SnackbarMessage>
             <DelayingAppearance loading={isLoading}/>
-            <Styles.InputBox>
+            <Styles.Container className='inputBox'>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Styles.OuterDiv>
-                        <Styles.InnerDiv>
-                            <Styles.InputTitle>First Name<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
-                            <Styles.ErrorDiv>
+                <Styles.Container className='OuterDiv'>
+                        <Styles.Container className='InnerDiv'>
+                            <Styles.InputTitle>First Name<Styles.ContainerSpan className='SpanAsterisk'>*</Styles.ContainerSpan></Styles.InputTitle>
+                            <Styles.Container className='ErrorDiv'>
                             <Styles.Input
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 defaultValue={params?.editUser?.first_name}
                                 {...register('first_name')}
                                 placeholder="first name"
                             />
-                            <Styles.ErrorSpan>
+                            <Styles.ContainerSpan className='ErrorSpan'>
                                 {errors.first_name &&
                                     errors.first_name.message}
-                            </Styles.ErrorSpan>
-                            </Styles.ErrorDiv>
-                        </Styles.InnerDiv>
-                        <Styles.InnerDiv>
-                            <Styles.InputTitle>Last Name<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
-                            <Styles.ErrorDiv>
+                            </Styles.ContainerSpan >
+                            </Styles.Container>
+                        </Styles.Container>
+                        <Styles.Container className='InnerDiv'>
+                            <Styles.InputTitle>Last Name<Styles.ContainerSpan className='SpanAsterisk'>*</Styles.ContainerSpan></Styles.InputTitle>
+                            <Styles.Container className='ErrorDiv'>
                             <Styles.Input
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 defaultValue={params?.editUser?.last_name}
                                 {...register('last_name')}
                                 placeholder="last name"
                             />
-                            <Styles.ErrorSpan>
+                            <Styles.ContainerSpan className='ErrorSpan'>
                                 {errors.last_name &&
                                     errors.last_name.message}
-                            </Styles.ErrorSpan>
-                            </Styles.ErrorDiv>
-                        </Styles.InnerDiv>
-                    </Styles.OuterDiv>
-                    <Styles.OuterDiv>
-                        <Styles.InnerDiv>
-                            <Styles.InputTitle>Email<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
-                            <Styles.ErrorDiv>
+                            </Styles.ContainerSpan >
+                            </Styles.Container>
+                            </Styles.Container>
+                    </Styles.Container>
+                    <Styles.Container className='OuterDiv'>
+                    <Styles.Container className='InnerDiv'>
+                            <Styles.InputTitle>Email<Styles.ContainerSpan className='SpanAsterisk'>*</Styles.ContainerSpan></Styles.InputTitle>
+                            <Styles.Container className='ErrorDiv'>
                             <Styles.Input
                                 type="string"
                                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -162,16 +162,16 @@ function UpdateDetails() {
                                 {...register('email')}
                                 placeholder="email"
                             />
-                            <Styles.ErrorSpan>
+                            <Styles.ContainerSpan className='ErrorSpan'>
                                 {errors.email &&
                                     errors.email.message}
-                            </Styles.ErrorSpan>
-                            </Styles.ErrorDiv>
-                        </Styles.InnerDiv>
-                        <Styles.InnerDiv>
-                            <Styles.InputTitle>Gender<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
+                            </Styles.ContainerSpan >
+                            </Styles.Container>
+                            </Styles.Container>
+                        <Styles.Container className='InnerDiv'>
+                            <Styles.InputTitle>Gender<Styles.ContainerSpan className='SpanAsterisk'>*</Styles.ContainerSpan></Styles.InputTitle>
                            
-                            <Styles.ErrorDiv>
+                            <Styles.Container className='ErrorDiv'>
                                 <Controller
                                 name="gender"
                                 control={control}
@@ -204,14 +204,14 @@ function UpdateDetails() {
                                 )}
                             />
                             {""}
-                            </Styles.ErrorDiv>
-                        </Styles.InnerDiv>
-                    </Styles.OuterDiv>
+                            </Styles.Container>
+                            </Styles.Container>
+                    </Styles.Container>
 
-                    <Styles.OuterDiv>
-                        <Styles.InnerDiv>
-                            <Styles.InputTitle>Designation<Styles.SpanAsterisk>*</Styles.SpanAsterisk></Styles.InputTitle>
-                            <Styles.ErrorDiv>
+                    <Styles.Container className='OuterDiv'>
+                    <Styles.Container className='InnerDiv'>
+                            <Styles.InputTitle>Designation<Styles.ContainerSpan className='SpanAsterisk'>*</Styles.ContainerSpan></Styles.InputTitle>
+                            <Styles.Container className='ErrorDiv'>
                             <Styles.Input
                                 type="string"
                                 defaultValue={params?.editUser?.designation}
@@ -219,17 +219,17 @@ function UpdateDetails() {
                                 {...register('designation')}
                                 placeholder="designation"
                             />
-                            <Styles.ErrorSpan>
+                            <Styles.ContainerSpan className='ErrorSpan'>
                                 {errors.designation &&
                                     errors.designation.message}
-                            </Styles.ErrorSpan>
-                            </Styles.ErrorDiv>
-                        </Styles.InnerDiv>
-                        <Styles.InnerDiv>
+                            </Styles.ContainerSpan >
+                            </Styles.Container>
+                            </Styles.Container>
+                        <Styles.Container className='InnerDiv'>
                             <Styles.InputTitle>
-                                Office Location<Styles.SpanAsterisk>*</Styles.SpanAsterisk>
+                                Office Location<Styles.ContainerSpan className='SpanAsterisk'>*</Styles.ContainerSpan>
                             </Styles.InputTitle>
-                            <Styles.ErrorDiv>
+                            <Styles.Container className='ErrorDiv'>
                             <Styles.Input
                                 type="string"
                                 defaultValue={params?.editUser?.office_location}
@@ -237,17 +237,17 @@ function UpdateDetails() {
                                 {...register('office_location')}
                                 placeholder="office location"
                             />
-                            <Styles.ErrorSpan>
+                            <Styles.ContainerSpan className='ErrorSpan'>
                                 {errors.office_location &&
                                     errors.office_location.message}
-                            </Styles.ErrorSpan>
-                            </Styles.ErrorDiv>
-                        </Styles.InnerDiv>
-                    </Styles.OuterDiv>
-                    <Styles.OuterDiv>
-                        <Styles.InnerDiv>
+                            </Styles.ContainerSpan >
+                            </Styles.Container>
+                            </Styles.Container>
+                    </Styles.Container>
+                    <Styles.Container className='OuterDiv'>
+                    <Styles.Container className='InnerDiv'>
                             <Styles.InputTitle>Employee Id</Styles.InputTitle>
-                            <Styles.ErrorDiv>
+                            <Styles.Container className='ErrorDiv'>
                             <Styles.Input
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 value={params?.editUser?.employee_id}
@@ -259,22 +259,22 @@ function UpdateDetails() {
                                 })}
                                 placeholder="employee id"
                             />{""}
-                            </Styles.ErrorDiv>
-                        </Styles.InnerDiv>
-                        <Styles.InnerDiv>
+                            </Styles.Container>
+                            </Styles.Container>
+                        <Styles.Container className='InnerDiv'>
                             
-                        </Styles.InnerDiv>
-                    </Styles.OuterDiv>
-                    <Styles.OuterDiv>
-                    <Styles.InnerDiv>
+                        </Styles.Container>
+                    </Styles.Container>
+                    <Styles.Container className='OuterDiv'>
+                    <Styles.Container className='InnerDiv'>
                         <Styles.Input type="submit" style={{backgroundColor:isValid? '#1976d2':"#808080", color:'#FFF'}}/>
-                    </Styles.InnerDiv>
-                    <Styles.InnerDiv>
+                        </Styles.Container>
+                    <Styles.Container className='InnerDiv'>
                         <Styles.Button type="reset" onClick={resetFields}>Reset</Styles.Button>
-                    </Styles.InnerDiv>
-                    </Styles.OuterDiv>
+                        </Styles.Container>
+                    </Styles.Container>
                 </form>
-            </Styles.InputBox>
+            </Styles.Container>
         </div>
     )
 }
