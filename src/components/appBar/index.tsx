@@ -5,8 +5,9 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import HomeIcon from '@mui/icons-material/Home'
 import { Link } from 'react-router-dom'
+import {iAppHeader} from "../../utils/interface"
 
-export default function AppHeader(props:any) {
+export default function AppHeader(props:iAppHeader) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">

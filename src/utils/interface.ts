@@ -83,3 +83,20 @@ export interface HeadCell {
     label: string;
 }
 
+export type iAppHeader ={
+    headerName:string
+}
+
+export type ilazyLoader = {
+    loading: boolean
+}
+
+// export type drawerScreen = {
+//     openDrawer: boolean
+//     setOpenDrawer: object
+//     editUser: IFormInput
+// }
+
+export type searchBar = {
+    searchKeyTerm :boolean
+}

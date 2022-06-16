@@ -14,7 +14,8 @@ export default function AlertDialog(props:any) {
 
   useEffect(()=>{
     if(isSuccess){
-        props.refetchEmpolyees('get_employees')
+        props.refetchEmpolyees('get_employees');
+        props.setOpenSnackbar(true);
     }
   },[isSuccess]);
 

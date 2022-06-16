@@ -15,6 +15,7 @@ import { useAppSelector } from '../../hooks'
 import { useDispatch } from 'react-redux'
 import {searchEmployees} from "../../reducers/actions"
 import useDebounce from "../dbounce";
+import {searchBar} from "../../utils/interface"
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',

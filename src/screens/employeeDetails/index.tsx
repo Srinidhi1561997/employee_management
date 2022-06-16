@@ -26,8 +26,8 @@ import SkeletonAnimations from "../../components/skeleton"
 import { Skeleton } from '@mui/material'
 import { Data } from "../../utils/interface"
 import { headCells } from "../../utils/constants"
-import {useQuery} from "react-query"
-import {rqGetEmployees,rqDeleteEmployees} from '../../reactQuery/apiCalls';
+import { useQuery } from "react-query"
+import { rqGetEmployees } from '../../reactQuery/apiCalls';
 
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -46,8 +46,8 @@ function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key
 ): (
-        a: { [key in Key]: number | string },
-        b: { [key in Key]: number | string },
+    a: { [key in Key]: number | string },
+    b: { [key in Key]: number | string },
     ) => number {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
@@ -121,9 +121,6 @@ function Home(): JSX.Element {
     const {isLoading,data,refetch, isError, isSuccess} = useQuery('get_employees', rqGetEmployees,{
         refetchOnWindowFocus:true
     });
-
-    // const employees = useAppSelector((state) => state.employee.employees)
-    const employees=data?.data;
     const filterEmployees:employeeData[] = useAppSelector((state) => state.searchEmployee.employees)
     // const isLoading = useAppSelector((state) => state.employee.isLoading)
     const isDelete = useAppSelector((state) => state.deleteEmployee.isDelete)
@@ -226,26 +223,6 @@ function Home(): JSX.Element {
             setSearchResults(data?.data);
             setToggleLoader(true);
         }
-        // if (term.length >= 1) {
-        //     console.log('filter employees in the handler', filterEmployees)
-        //     if (filterEmployees.length > 0) {
-        //         setSearchResults(filterEmployees);
-        //     } else {
-        //         setSearchResults([{
-        //             designation: "",
-        //             email: "",
-        //             employee_id: '1',
-        //             first_name: "",
-        //             gender: "No results found",
-        //             last_name: "",
-        //             office_location: "",
-        //             emp_actions:1,
-        //             id:''
-        //         }]);
-        //     }
-        // } else {
-        //     setSearchResults(employees);
-        // }
     }
 
     const deleteFunction=(rowValue:employeeData)=>{
@@ -276,9 +253,10 @@ function Home(): JSX.Element {
                     employee_name={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name}`}
                     employee_data={deleteEmployee}
                     refetchEmpolyees={refetch}
+                    setOpenSnackbar={setOpenSnackbar}
                     >
                     </AlertDialog>
-                    <PersistentDrawerRight openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} editUser={editUser} setEditUser={setEditUser}/>
+                    <PersistentDrawerRight refetchEmpolyees={refetch} openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} editUser={editUser} setEditUser={setEditUser}/>
                     {/* <DelayingAppearance loading={isLoading}/> */}
                     <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name} deleted successfully`}></SnackbarMessage>
                 {isLoading?<SkeletonAnimations/>:
@@ -297,8 +275,6 @@ function Home(): JSX.Element {
                             // rowCount={searchResults?.length}
                         />
                         <TableBody>
-                            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                             {stableSort(searchTerm?filterEmployees:searchResults, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
