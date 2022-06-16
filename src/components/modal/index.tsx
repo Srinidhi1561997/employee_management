@@ -1,21 +1,31 @@
+import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { deleteEmployees } from "../../reducers/actions"
-import { useAppDispatch } from '../../hooks'
+import { useMutation } from 'react-query';
+import { rqDeleteEmployees } from '../../reactQuery/apiCalls';
 
 export default function AlertDialog(props:any) {
-  const dispatch = useAppDispatch()
+
+  const{mutate:deleteEmployee,isSuccess} = useMutation(['delete_employee_id',props?.employee_data?.id], ()=>rqDeleteEmployees(props.employee_data.id));
+
+  useEffect(()=>{
+    if(isSuccess){
+        props.refetchEmpolyees('get_employees')
+    }
+  },[isSuccess]);
 
   const handleClose = () => {
     props.setOpenModal(false);
   };
 
   const handleAgree = () =>{
-    dispatch(deleteEmployees(props.employee_data.id));
+    if(props?.employee_data?.id){
+        deleteEmployee()
+    }
     props.setOpenModal(false);
   }
 

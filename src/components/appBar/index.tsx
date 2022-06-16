@@ -1,10 +1,8 @@
-import { styled, alpha } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import InputBase from '@mui/material/InputBase'
 import HomeIcon from '@mui/icons-material/Home'
 import { Link } from 'react-router-dom'
 
@@ -26,7 +24,7 @@ export default function AppHeader(props:any) {
                                 color: '#fff',
                             }}
                         >
-                            <HomeIcon />
+                            <HomeIcon/>
                         </Link>
                     </IconButton>
                     <Typography

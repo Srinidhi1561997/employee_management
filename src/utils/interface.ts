@@ -53,3 +53,33 @@ export const actionIds = {
     EDIT_SPECIFIC_EMPLOYEE: "EDIT_SPECIFIC_EMPLOYEE",
     SEARCH_EMPLOYEES : "SEARCH_EMPLOYEES"
 };
+
+export interface IFormInput {
+    designation: string
+    email: string
+    employee_id: string
+    first_name: string
+    gender: string
+    last_name: string
+    office_location: string
+    emp_actions: number
+    id: string
+}
+
+export type Data = {
+    designation: string
+    email: string
+    employee_id: string
+    first_name: string
+    gender: string
+    last_name: string
+    office_location: string
+    emp_actions: number
+    id:string
+}
+
+export interface HeadCell {
+    id: keyof Data;
+    label: string;
+}
+

@@ -1,5 +1,5 @@
  
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -16,27 +16,18 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { useNavigate ,useLocation} from 'react-router-dom'
 import { visuallyHidden } from '@mui/utils'
 import AlertDialog from "../../components/modal"
-import {getEmployees,searchEmployees} from "../../reducers/actions"
+import { getEmployees } from "../../reducers/actions"
 import SearchAppBar from '../../components/searchAppBar'
-import { useAppSelector ,useAppDispatch} from '../../hooks'
+import { useAppSelector ,useAppDispatch } from '../../hooks'
 import { employeeData } from '../../utils/interface'
 import SnackbarMessage from "../../components/snackbar"
-import DelayingAppearance from "../../components/circularProgressBar"
-
-
-
-type Data = {
-    designation: string
-    email: string
-    employee_id: string
-    // employee_status: boolean;
-    first_name: string
-    gender: string
-    last_name: string
-    office_location: string
-    emp_actions: number
-    id:string
-}
+import PersistentDrawerRight from "../../components/drawer"
+import SkeletonAnimations from "../../components/skeleton"
+import { Skeleton } from '@mui/material'
+import { Data } from "../../utils/interface"
+import { headCells } from "../../utils/constants"
+import {useQuery} from "react-query"
+import {rqGetEmployees,rqDeleteEmployees} from '../../reactQuery/apiCalls';
 
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -77,58 +68,18 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell {
-    id: keyof Data;
-    label: string;
-}
-
-const headCells: readonly HeadCell[] = [
-    {
-        id: 'employee_id',
-        label: 'Emp Id',
-    },
-    {
-        id: 'first_name',
-        label: 'First name',
-    },
-    {
-        id: 'last_name',
-        label: 'Last name',
-    },
-    {
-        id: 'email',
-        label: 'E-mail',
-    },
-    {
-        id: 'gender',
-        label: 'Gender',
-    },
-    {
-        id: 'designation',
-        label: 'Designation',
-    },
-    {
-        id: 'office_location',
-        label: 'Office location',
-    },
-    {
-        id: 'emp_actions',
-        label: 'Actions',
-    }
-];
-
 interface EnhancedTableProps {
     numSelected: number;
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
-    rowCount: number;
+    // rowCount: number;
 }
 
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { onSelectAllClick, order, orderBy, numSelected, onRequestSort } = props;
     const createSortHandler =
         (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
@@ -167,9 +118,14 @@ function Home(): JSX.Element {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
     const location = useLocation()
-    const employees = useAppSelector((state) => state.employee.employees)
+    const {isLoading,data,refetch, isError, isSuccess} = useQuery('get_employees', rqGetEmployees,{
+        refetchOnWindowFocus:true
+    });
+
+    // const employees = useAppSelector((state) => state.employee.employees)
+    const employees=data?.data;
     const filterEmployees:employeeData[] = useAppSelector((state) => state.searchEmployee.employees)
-    const isLoading = useAppSelector((state) => state.employee.isLoading)
+    // const isLoading = useAppSelector((state) => state.employee.isLoading)
     const isDelete = useAppSelector((state) => state.deleteEmployee.isDelete)
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('employee_id');
@@ -183,29 +139,23 @@ function Home(): JSX.Element {
     const [openModal, setOpenModal] = React.useState(false);
     const [deleteEmployee, setDeleteEmployee] = React.useState<employeeData>();
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const pageNumber:any = location.state as {pageNumber:Number}
-
-    useEffect(()=>{
-        dispatch(getEmployees())
-    },[getEmployees])
-
+    const [openDrawer, setOpenDrawer] = React.useState(false);
+    const [editUser, setEditUser] = React.useState({});
 
     useEffect(() => {
-        setSearchResults(employees);
-    }, [employees]);
+        console.log('wertyu',data?.data)
+        if(data?.data?.length){
+            setSearchResults(data?.data);
+        }
+    }, [data?.data]);
 
     useEffect(()=>{
         if(isDelete){
             setOpenSnackbar(true);
-            dispatch(getEmployees())
+            refetch()
         }
     },[isDelete]);
     
-    // useEffect(()=>{
-    //     if(pageNumber?.pageNumber){
-    //         setPage(pageNumber);
-    //     }
-    // },[pageNumber]);
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -270,52 +220,52 @@ function Home(): JSX.Element {
 
     const searchHandler = (term: string) => {
         setPage(0);
-    //     if(term.length>=1){
-    //     dispatch(searchEmployees(term));
-    // }
         setSearchTerm(term);
-        if (searchResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).length < 1) {
-            setToggleLoader(true);
-        }
         if (term === "") {
-            setSearchResults(employees);
+            console.log('1',isError, isLoading, isSuccess)
+            setSearchResults(data?.data);
             setToggleLoader(true);
         }
-        if (term.length >= 1) {
-            // const results = employees.filter((user:Data) => {
-            //     return user.first_name.toLowerCase().startsWith(term.toLowerCase());
-            //     // Use the toLowerCase() method to make it case-insensitive
-            // });
-            if (filterEmployees.length > 0) {
-                setSearchResults(filterEmployees);
-            } else {
-                setSearchResults([{
-                    designation: "",
-                    email: "",
-                    employee_id: '1',
-                    first_name: "",
-                    gender: "No results found",
-                    last_name: "",
-                    office_location: "",
-                    emp_actions:1,
-                    id:''
-                }]);
-            }
-        } else {
-            setSearchResults(employees);
-        }
+        // if (term.length >= 1) {
+        //     console.log('filter employees in the handler', filterEmployees)
+        //     if (filterEmployees.length > 0) {
+        //         setSearchResults(filterEmployees);
+        //     } else {
+        //         setSearchResults([{
+        //             designation: "",
+        //             email: "",
+        //             employee_id: '1',
+        //             first_name: "",
+        //             gender: "No results found",
+        //             last_name: "",
+        //             office_location: "",
+        //             emp_actions:1,
+        //             id:''
+        //         }]);
+        //     }
+        // } else {
+        //     setSearchResults(employees);
+        // }
     }
-
-    useEffect(()=>{
-        setSearchResults(filterEmployees)
-    },[filterEmployees]);
 
     const deleteFunction=(rowValue:employeeData)=>{
         setDeleteEmployee(rowValue);
         setOpenModal(true);
     }
 
-    console.log('page number is',filterEmployees)
+    React.useEffect(()=>{
+        if(Object.values(editUser).length>0){
+            setOpenDrawer(true)
+        }
+    },[editUser])
+
+    React.useEffect(()=>{
+        if(openDrawer===false){
+            setEditUser({});
+        }
+    },[openDrawer]);
+
+    console.log('rprint the searchUser', searchResults,data)
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -325,10 +275,13 @@ function Home(): JSX.Element {
                     setOpenModal={setOpenModal}
                     employee_name={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name}`}
                     employee_data={deleteEmployee}
+                    refetchEmpolyees={refetch}
                     >
                     </AlertDialog>
-                    <DelayingAppearance loading={isLoading}/>
+                    <PersistentDrawerRight openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} editUser={editUser} setEditUser={setEditUser}/>
+                    {/* <DelayingAppearance loading={isLoading}/> */}
                     <SnackbarMessage openSnackbar={openSnackbar} setOpenSnackbar={setOpenSnackbar} snackbarMessage={`${deleteEmployee?.first_name} ${deleteEmployee?.last_name} deleted successfully`}></SnackbarMessage>
+                {isLoading?<SkeletonAnimations/>:
                 <TableContainer style={{ marginTop: "1%" }}>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -336,17 +289,17 @@ function Home(): JSX.Element {
                         size={dense ? 'small' : 'medium'}
                     >
                         <EnhancedTableHead
-                            numSelected={selected.length}
+                            numSelected={selected?.length}
                             order={order}
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={searchResults.length}
+                            // rowCount={searchResults?.length}
                         />
                         <TableBody>
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                            {stableSort(searchResults, getComparator(order, orderBy))
+                            {stableSort(searchTerm?filterEmployees:searchResults, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -379,7 +332,9 @@ function Home(): JSX.Element {
                                                     <EditIcon
                                                         style={{cursor:'pointer', color:'blue'}}
                                                         onClick={() => [
-                                                            navigate('/update-employee', { state: { editUser: row, pageNumber: page} })]}
+                                                            setEditUser(row),                                                         
+                                                            // navigate('/update-employee', { state: { editUser: row, pageNumber: page} })
+                                                        ]}
                                                     />
                                                     </IconButton>}
                                                     {row?.employee_id === '1' ? <></> :
@@ -404,17 +359,21 @@ function Home(): JSX.Element {
                             )}
                         </TableBody>
                     </Table>
-                </TableContainer>
-                {searchResults[0]?.employee_id === '1' ? null :
+                </TableContainer> }
+                {isLoading?<Skeleton variant='text' style={{width:'30%',display:'flex', justifySelf: 'flex-end', marginLeft: '80%'}}/>:
+                <>
+                {/* {searchResults[0]?.employee_id === '1' ? null : */}
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={searchResults.length}
+                        count={searchTerm?filterEmployees?.length:searchResults?.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleChangeRowsPerPage}
-                    />}
+                    />
+                    {/* } */}
+                    </>}
             </Paper>
         </Box>
     )

@@ -1,5 +1,5 @@
 import {  put, call } from "redux-saga/effects";
-import employeeApi from "../api";
+import employeeApi from "../api/axiosClient";
 import { AxiosResponse } from "axios";
 import {
     editSpecificEmployeeAction,
@@ -51,6 +51,7 @@ function* getEmployeesWorker() {
 
     try {
         const response: AxiosResponse = yield call(employeeApi.get, "/employee_list");
+        // console.log('getEmployess', response)
         if(response?.status===200){
             yield put(GetEmployeeAction.get_EmployeesSuccess(response.data))
         }
@@ -64,7 +65,6 @@ function* searchEmployeesWorker({searchKey}:searchEmployeesAction) {
 
     try {
         const response: AxiosResponse = yield call(employeeApi.get, `/employee_list?search=${searchKey}`);
-        console.log('response is search employee', response)
         if(response?.status===200){
             yield put(SearchEmployeeAction.search_EmployeesSuccess(response.data))
         }

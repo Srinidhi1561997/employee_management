@@ -4,70 +4,71 @@ import { device } from "../../utils/constants";
 const Container = styled.div`
   .inputBox {
     margin-bottom: 20px;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 20px;
-    @media ${device.mobileXS} {
-      margin-left: 5px;
-      margin-right: 5px;
-    }
-    @media ${device.mobileS} {
-      margin-left: 20px;
-      margin-right: 20px;
-    }
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 40%;
+    // @media ${device.mobileXS} {
+    //   margin-left: 5px;
+    //   margin-right: 5px;
+    // }
+    // @media ${device.mobileS} {
+    //   margin-left: 20px;
+    //   margin-right: 20px;
+    // }
 
-    @media ${device.tablet} {
-      margin-bottom: 20px;
-      margin-left: 50px;
-      margin-right: 50px;
-      margin-top: 20px;
-    }
-    @media ${device.laptop} {
-      margin-bottom: 20px;
-      margin-left: 50px;
-      margin-right: 50px;
-      margin-top: 20px;
-    }
+    // @media ${device.tablet} {
+    //   margin-bottom: 20px;
+    //   margin-left: 50px;
+    //   margin-right: 50px;
+    //   margin-top: 20px;
+    // }
+    // @media ${device.laptop} {
+    //   margin-bottom: 20px;
+    //   margin-left: 50px;
+    //   margin-right: 50px;
+    //   margin-top: 20px;
+    // }
   }
   .OuterDiv {
     display: flex;
-    flex-direction: row;
-    @media ${device.mobileS} {
-      flex-direction: column;
-    }
-    @media ${device.mobileXS} {
-      flex-direction: column;
-    }
-    @media ${device.mobileL} {
-      flex-direction: column;
-    }
-    @media ${device.tablet} {
-      flex-direction: row;
-    }
-    @media ${device.laptop} {
-      flex-direction: row;
-    }
+    flex-direction: column;
+    // background-color: cyan;
+    // @media ${device.mobileS} {
+    //   flex-direction: column;
+    // }
+    // @media ${device.mobileXS} {
+    //   flex-direction: column;
+    // }
+    // @media ${device.mobileL} {
+    //   flex-direction: column;
+    // }
+    // @media ${device.tablet} {
+    //   flex-direction: row;
+    // }
+    // @media ${device.laptop} {
+    //   flex-direction: row;
+    // }
   }
   .InnerDiv {
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 10px;
-    @media ${device.mobileS} {
-      width: 100%;
-      // background-color: pink;
-    }
-    @media ${device.mobileXS} {
-      width: 100%;
-      // background-color: red;
-    }
-    @media ${device.tablet} {
-      width: 50%;
-    }
-    @media ${device.laptop} {
-      width: 50%;
-    }
+    // @media ${device.mobileS} {
+    //   width: 100%;
+    //   // background-color: pink;
+    // }
+    // @media ${device.mobileXS} {
+    //   width: 100%;
+    //   // background-color: red;
+    // }
+    // @media ${device.tablet} {
+    //   width: 50%;
+    // }
+    // @media ${device.laptop} {
+    //   width: 50%;
+    // }
   }
   .ErrorDiv {
     display: flex;

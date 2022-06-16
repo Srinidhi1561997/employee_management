@@ -1,3 +1,4 @@
+import {HeadCell} from './interface'
 export const GET_EMPLOYEES = 'GET_EMPLOYEES'
 export const GET_EMPLOYEE_BY_ID = 'GET_EMPLOYEES_BY_ID'
 export const CREATE_EMPLOYEE = 'CREATE_EMPLOYEE'
@@ -26,3 +27,38 @@ export const device = {
     desktop: `(min-width: ${size.desktop})`,
     desktopL: `(min-width: ${size.desktop})`
   };
+
+  export const headCells: readonly HeadCell[] = [
+    {
+        id: 'employee_id',
+        label: 'Emp Id',
+    },
+    {
+        id: 'first_name',
+        label: 'First name',
+    },
+    {
+        id: 'last_name',
+        label: 'Last name',
+    },
+    {
+        id: 'email',
+        label: 'E-mail',
+    },
+    {
+        id: 'gender',
+        label: 'Gender',
+    },
+    {
+        id: 'designation',
+        label: 'Designation',
+    },
+    {
+        id: 'office_location',
+        label: 'Office location',
+    },
+    {
+        id: 'emp_actions',
+        label: 'Actions',
+    }
+];

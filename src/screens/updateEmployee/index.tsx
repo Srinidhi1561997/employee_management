@@ -1,51 +1,23 @@
 import React, { useEffect } from 'react'
-import { takeEvery, put, call, StrictEffect } from "redux-saga/effects";
-// import { useLocation } from 'react-router-dom'
 import { useForm, SubmitHandler, Controller} from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { MenuItem, Select } from '@mui/material'
 import AppHeader from '../../components/appBar'
 import Styles from './styles'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { editSpecificEmployee } from '../../reducers/actions'
-import * as Constants from '../../utils/constants'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { employeeData } from '../../utils/interface';
 import SnackbarMessage from '../../components/snackbar';
 import DelayingAppearance from "../../components/circularProgressBar"
-// import { GET_EMPLOYEES } from '../App/reduxTypes'
+import schema from '../../components/inputSchema'
+import {IFormInput} from '../../utils/interface'
+import "./updateEmployee.css"
 
-const schema = yup
-    .object({
-        first_name: yup.string().required("first name is required").min(3,"first name must be atleast 3 characters").max(20," first name should not exceed more than 20 characters").matches(/^[A-Za-z_ ]+$/i,"first name should contain only character"),
-        last_name: yup.string().required("last name is required").min(3, "last name must be atleast 3 characters").max(20, "last name should not exceed more than 20 characters").matches(/^[A-Za-z_ ]+$/i, "last name should contain only character"),
-        designation: yup.string().required("designation is required").min(5,"designation must be atleast 5 characters").max(50,"designation should not exceed more than 50 characters").matches(/^[A-Za-z0-9_ ]+$/i, "splecial characters are not allowed"),
-        email: yup.string().required("email is required").min(10,"email must be atleast 10 characters").max(60, "email should not exceed more than 60 characters").matches(/^([a-zA-Z0-9]+)([\{1}])?[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "invalid email format"),
-        gender: yup.string().required(),
-        office_location: yup.string().required("office location is required").min(5,"office location must be atleast 5 characters").max(200,"office address should not exceed more than 200 characters").matches(/^[A-Za-z0-9 !@#$%^&*,.)(/]+$/i,"invalid address"),
-        // salary: yup.number().required(),
-        employee_id: yup.string(),
-        emp_actions: yup.number()
-    })
-    .required()
-
-interface IFormInput {
-    designation: string
-    email: string
-    employee_id: string
-    first_name: string
-    gender: string
-    last_name: string
-    office_location: string
-    emp_actions: number
-    id:string
-}
 
 function UpdateDetails() {
     const dispatch = useAppDispatch()
     const location = useLocation()
-    const success = useAppSelector((state) => state.createEmployee.success)
     const isEdit = useAppSelector((state) => state.editUserData.isEdit)
     const isLoading = useAppSelector((state) => state.editUserData.isLoading)
     const [editUserData, setEditUserData] = React.useState<employeeData>()
@@ -58,7 +30,7 @@ function UpdateDetails() {
         watch,
         reset,
         control,
-        formState: { errors, isDirty, isValid ,isValidating},
+        formState: { errors, isValid },
     } = useForm<IFormInput>({ resolver: yupResolver(schema),
             defaultValues:{
                 gender: params?.editUser?.gender.toLowerCase()
@@ -177,20 +149,11 @@ function UpdateDetails() {
                                 control={control}
                                 render={({ field: { ref, ...field } }) => (
                             <Select
-                                style={{
-                                    height: '45px',
-                                    outline: 'none',
-                                    borderRadius: '5px',
-                                    border: '1px solid #cccccc',
-                                    paddingLeft: '15px',
-                                    fontSize: '16px',
-                                    borderBottomWidth: '2px',
-                                    transition: 'all 0.3s ease',
-                                    width: '100%',
-                                }}
+                                className='dropDownSelect'
                                 defaultValue={params?.editUser?.gender.toLowerCase()}
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 // {...register('gender')}
+                                placeholder='gender'
                                 {...field}
                                 inputRef={ref}
                             >
@@ -267,7 +230,7 @@ function UpdateDetails() {
                     </Styles.Container>
                     <Styles.Container className='OuterDiv'>
                     <Styles.Container className='InnerDiv'>
-                        <Styles.Input type="submit" style={{backgroundColor:isValid? '#1976d2':"#808080", color:'#FFF'}}/>
+                        <Styles.Input type="submit" style={{backgroundColor:'#1976d2', color:'#FFF'}}/>
                         </Styles.Container>
                     <Styles.Container className='InnerDiv'>
                         <Styles.Button type="reset" onClick={resetFields}>Reset</Styles.Button>

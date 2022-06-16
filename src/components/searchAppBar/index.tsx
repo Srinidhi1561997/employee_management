@@ -11,7 +11,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Clear'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import { Link } from 'react-router-dom'
-import { useAppSelector ,useAppDispatch} from '../../hooks'
+import { useAppSelector } from '../../hooks'
 import { useDispatch } from 'react-redux'
 import {searchEmployees} from "../../reducers/actions"
 import useDebounce from "../dbounce";
@@ -53,7 +53,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         paddingRight: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
-        // backgroundColor: 'pink',
         [theme.breakpoints.up('sm')]: {
             width: '12ch',
             '&:focus': {
@@ -88,9 +87,9 @@ export default function SearchAppBar(props: any) {
     }
 
     React.useEffect(()=>{
-        console.log('search term', deBouncedText)
-
-        dispatch(searchEmployees(deBouncedText));
+        if(deBouncedText!==''){
+            dispatch(searchEmployees(deBouncedText));
+        }
     },[deBouncedText]);
 
 
